@@ -1,0 +1,86 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карьерный навигатор</title>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+<body>
+    <header>
+        <h1>Добро пожаловать в Карьерный навигатор</h1>
+    </header>
+    
+    <main>
+        <section>
+            <h2>Создание личного кабинета работодателя</h2>
+            <form id="employer-form">
+                <label for="company-name">Название компании:</label>
+                <input type="text" id="company-name" name="company-name" required>
+                <button type="submit">Создать кабинет</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Добавление специальностей</h2>
+            <form id="position-form">
+                <label for="position-name">Название специальности:</label>
+                <input type="text" id="position-name" name="position-name" required>
+                <label for="requirements">Требования:</label>
+                <textarea id="requirements" name="requirements" required></textarea>
+                <button type="submit">Добавить специальность</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Список выпускников</h2>
+            <ul id="graduates-list">
+                <!-- Список выпускников будет загружен сюда -->
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Карьерный навигатор</p>
+    </footer>
+
+    <script>
+        // Пример данных выпускников
+        const graduates = [
+            { name: 'Иван Иванов', skills: ['JavaScript', 'HTML', 'CSS'] },
+            { name: 'Мария Петрова', skills: ['Python', 'Django'] },
+            { name: 'Сергей Сидоров', skills: ['Java', 'Spring'] }
+        ];
+
+        // Получаем элемент списка
+        const graduatesList = document.getElementById('graduates-list');
+
+        // Генерируем HTML для каждого выпускника
+        graduates.forEach(graduate => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${graduate.name}: ${graduate.skills.join(', ')}`;
+            graduatesList.appendChild(listItem);
+        });
+
+        // Обработчик для формы работодателя
+        document.getElementById('employer-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Предотвращаем перезагрузку страницы
+            const companyName = document.getElementById('company-name').value;
+            alert(`Кабинет для компании "${companyName}" создан!`);
+            // Здесь можно добавить код для сохранения данных
+            this.reset(); // Сбрасываем форму
+        });
+
+        // Обработчик для формы специальностей
+        document.getElementById('position-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Предотвращаем перезагрузку страницы
+            const positionName = document.getElementById('position-name').value;
+            const requirements = document.getElementById('requirements').value;
+            alert(`Специальность "${positionName}" добавлена с требованиями: ${requirements}`);
+            // Здесь можно добавить код для сохранения данных
+            this.reset(); // Сбрасываем форму
+        });
+    </script>
+</body>
+</html>

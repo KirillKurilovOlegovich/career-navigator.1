@@ -1,0 +1,22 @@
+{
+    "name": "career-navigator",
+    "version": "1.0.0",
+    "description": "Веб-ресурс для объединения абитуриентов, вузов и работодателей.",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "keywords": [
+        "career",
+        "navigator",
+        "education",
+        "employment"
+    ],
+    "author": "Ваше Имя",
+    "license": "MIT",
+    "dependencies": {
+        "body-parser": "^1.20.3",
+        "cors": "^2.8.5",
+        "express": "^4.21.2"
+    }
+}
