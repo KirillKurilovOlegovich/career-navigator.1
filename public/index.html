@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -46,30 +45,45 @@
     </footer>
 
     <script>
-        // Пример данных выпускников
-        const graduates = [
-            { name: 'Иван Иванов', skills: ['JavaScript', 'HTML', 'CSS'] },
-            { name: 'Мария Петрова', skills: ['Python', 'Django'] },
-            { name: 'Сергей Сидоров', skills: ['Java', 'Spring'] }
-        ];
+        // Функция для загрузки списка выпускников
+        function loadGraduates() {
+            fetch('../api.php')
+                .then(response => response.json())
+                .then(data => {
+                    const graduatesList = document.getElementById('graduates-list');
+                    graduatesList.innerHTML = ''; // Очищаем список перед добавлением новых данных
 
-        // Получаем элемент списка
-        const graduatesList = document.getElementById('graduates-list');
+                    data.forEach(graduate => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${graduate.graduate_name} - Специальность: ${graduate.specialty_name}, Компания: ${graduate.company_name}`;
+                        graduatesList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
 
-        // Генерируем HTML для каждого выпускника
-        graduates.forEach(graduate => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${graduate.name}: ${graduate.skills.join(', ')}`;
-            graduatesList.appendChild(listItem);
-        });
+        // Загружаем список выпускников при загрузке страницы
+        window.onload = loadGraduates;
 
         // Обработчик для формы работодателя
         document.getElementById('employer-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Предотвращаем перезагрузку страницы
             const companyName = document.getElementById('company-name').value;
-            alert(`Кабинет для компании "${companyName}" создан!`);
-            // Здесь можно добавить код для сохранения данных
-            this.reset(); // Сбрасываем форму
+
+            fetch('../create_company.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ company_name: companyName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(`Кабинет для компании "${data.company_name}" создан!`);
+                this.reset(); // Сбрасываем форму
+                loadGraduates(); // Перезагружаем список выпускников
+            })
+            .catch(error => console.error('Error:', error));
         });
 
         // Обработчик для формы специальностей
@@ -77,9 +91,21 @@
             event.preventDefault(); // Предотвращаем перезагрузку страницы
             const positionName = document.getElementById('position-name').value;
             const requirements = document.getElementById('requirements').value;
-            alert(`Специальность "${positionName}" добавлена с требованиями: ${requirements}`);
-            // Здесь можно добавить код для сохранения данных
-            this.reset(); // Сбрасываем форму
+
+            fetch('../add_specialty.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ position_name: positionName, requirements: requirements })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(`Специальность "${data.position_name}" добавлена!`);
+                this.reset(); // Сбрасываем форму
+                loadGraduates(); // Перезагружаем список выпускников
+            })
+            .catch(error => console.error('Error:', error));
         });
     </script>
 </body>
